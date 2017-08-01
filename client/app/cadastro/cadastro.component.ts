@@ -1,3 +1,4 @@
+import { FotoService } from './../foto/foto.service';
 /**
  * Created by leand on 10/05/2017.
  */
@@ -18,10 +19,10 @@ export class CadastroComponent {
 
     meuForm: FormGroup;
 
-    private http: Http;
+    private service: FotoService;
 
-    constructor(http:Http, fb: FormBuilder) {
-        this.http = http;
+    constructor(service:FotoService, fb: FormBuilder) {
+        this.service = service;
 
         this.meuForm = fb.group({
             titulo: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -36,8 +37,7 @@ export class CadastroComponent {
 
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-
-        this.http.post('v1/fotos', JSON.stringify(this.foto), {headers: headers})
+        this.service.cadastra(this.foto)
             .subscribe(() => {
                 this.foto = new FotoComponent();
                 console.log("Foto salva com sucesso");
