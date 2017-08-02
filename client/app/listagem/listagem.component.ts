@@ -12,13 +12,35 @@ import {Http} from "@angular/http";
 export class ListagemComponent {
 
     fotos: FotoComponent[] = [];
+    service: FotoService;
+    mensagem: string = "";
 
     constructor(service: FotoService) {
-        service.lista()
+        this.service = service;
+        this.service.lista()
             .subscribe(
                 fotos => this.fotos = fotos,
                 erro => console.log(erro)
             )
     }
+
+    remove(foto):void {
+        console.log(foto);
+        this.service.remove(foto)
+            .subscribe(
+                fotos => {
+                    let novasFotos = this.fotos.slice(0);
+                    let indice = novasFotos.indexOf(foto);
+                    novasFotos.splice(indice, 1);
+                    this.fotos = novasFotos;
+                    this.mensagem = "Foto excluida com sucesso";
+                },
+                error => { 
+                    console.log(error)
+                    this.mensagem = "Não foi possível remover a foto";
+                }
+            );
+    }
+        
 
 }
